@@ -32,6 +32,7 @@ const insurancecoverageRoutes = require('./routes/insurancecoverageRouter');
 const bankInfoRouts = require('./routes/bankInformationRouter');
 const companyClaimsRotes = require('./routes/companyClaimsRouter');
 const consumptionRoutes = require('./routes/consumptionControllerRouter');
+const apporovalSaleRoutes = require('./routes/apporovalSaleRouter')
 
 dotenv.config();
 
@@ -91,6 +92,7 @@ app.use('/api/insurancecoverage', insurancecoverageRoutes);
 app.use('/api/bankinformation', bankInfoRouts);
 app.use('/api/companyClaims', companyClaimsRotes);
 app.use('/api/consumptionControl', consumptionRoutes);
+app.use('/api/apporovalSale', apporovalSaleRoutes)
 
 
 
