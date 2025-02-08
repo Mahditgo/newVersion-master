@@ -1,9 +1,9 @@
 const {Router} = require('express');
 const consumptionController = require('./../controllers/consuptionController');
 // const { requireAuth } = require('./../middlewares/requireAuth')
+// router.use(requireAuth);
 const router = Router();
 
-// router.use(requireAuth);
 router.post('/:reportId', consumptionController.createConsuption);
 router.get('/:reportId', consumptionController.getConsuptionControl);
 router.delete('/:id', consumptionController.deletecompanyClaims);

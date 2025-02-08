@@ -2,11 +2,7 @@
 const consumptionModel = require('./../models/consumptionControlModel')
 
 exports.createConsuption = async (req, res) => {
-    let { user } = req
-    let { activeReport } = user
-    if(!activeReport){
-        return res.status(400).json({ error: 'نسبت به انتخاب واحد مورد گزارش دیگری اقدام نمایید' })
-    }
+    const {reportId } = req.params;
     const { productCode,
             productName,
             materialCode,
@@ -39,7 +35,7 @@ exports.createConsuption = async (req, res) => {
         // console.log(newConsumption);
 
         let result;
-        const existingConsumption = await consumptionModel.findOne({reportId : activeReport});
+        const existingConsumption = await consumptionModel.findOne({reportId });
         // console.log(existingConsumption);
         
         if(existingConsumption) {
@@ -53,7 +49,7 @@ exports.createConsuption = async (req, res) => {
             }
         } else {
             const newConsumptions= new consumptionModel({
-                reportId : activeReport,
+                reportId ,
                 items : [newConsumption]
             });
             result = await newConsumptions.save();
