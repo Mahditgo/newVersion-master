@@ -1,27 +1,27 @@
 const ConsumptionControl = require('./../models/consumptionControlModel');
 const ProductionsDetails = require('./../models/productionsDetailsModel');
-  
+const Discrepancy = require('./../models/consumptionControlViewModel')
 
 
 
 const getconsuptionControlView = async (req, res) => {
     try {
-        // const { reportId } = req.params;
-        // if (!reportId) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "Report ID is required",
-        //     });
-        // }
+        const { reportId } = req.params;
+        if (!reportId) {
+            return res.status(400).json({
+                success: false,
+                message: "Report ID is required",
+            });
+        }
 
-               let { user } = req
-                let { activeReport } = user
-                if(!activeReport){
-                    return res.status(400).json({ error: 'نسبت به انتخاب واحد مورد گزارش دیگری اقدام نمایید' })
-                }
+            //    let { user } = req
+            //     let { activeReport } = user
+            //     if(!activeReport){
+            //         return res.status(400).json({ error: 'نسبت به انتخاب واحد مورد گزارش دیگری اقدام نمایید' })
+            //     }
 
-        const consumptionControl = await ConsumptionControl.find({ reportId : activeReport }).lean();
-        const productions = await ProductionsDetails.find({ reportId : activeReport }).lean();
+        const consumptionControl = await ConsumptionControl.find({ reportId  }).lean();
+        const productions = await ProductionsDetails.find({ reportId  }).lean();
 
         if (!consumptionControl || !productions) {
             return res.status(404).json({
@@ -59,14 +59,41 @@ const getconsuptionControlView = async (req, res) => {
                             coefficient: material.coefficient,
                             ConsumableQuantity,
                         });
+
+
+      
+                        // ConsumptionControl.findOneAndUpdate(
+                        //     { reportId, "items.productCode": product.productCode, "items.materialItems.materialCode": material.materialCode },
+                        //     {
+                        //       $set: { 
+                        //         "items.$.materialItems.$[elem].ConsumableQuantity": ConsumableQuantity 
+                        //       }
+                        //     },
+                        //     {
+                        //       arrayFilters: [{ "elem.materialCode": material.materialCode }],
+                        //       new: true 
+                        //     }
+                        //   )
+                        //   .then(result => {
+                        //     console.log("Updated document:", result);
+                        //   })
+                        //   .catch(err => {
+                        //     console.error("Error updating:", err);
+                        //   });
+                          
                     });
                 }
             });
         });
 
+        if (discrepancies.length > 0) {
+            await Discrepancy.insertMany(discrepancies);  // ذخیره همه داده‌ها
+        }
+
+
         res.status(200).json({
             success: true,
-            reportId : activeReport,
+            reportId ,
             data: discrepancies,
         });
     } catch (err) {

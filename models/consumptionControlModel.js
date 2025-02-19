@@ -33,11 +33,14 @@ const consumptionControlSchema = new mongoose.Schema({
                     coefficient : {
                         type : Number,
                         required : true
-                    }
+                    },
+                    ConsumableQuantity: { type: Number, default: 0 }
                 }
             ]
         }
-    ]
+    ],
+
+    
 });
 
 const ConsumptionControl = mongoose.model('ConsumptionControl', consumptionControlSchema);

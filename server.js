@@ -21,7 +21,12 @@ const materialCountingRotes = require('./routes/materialCountingRouter');
 const otherGoodsCountingsRoutes = require('./routes/otherGoodsCountingRouter');
 const materialDiscrepancy = require('./routes/materialDiscrepancyRouter');
 const otherGoodsDiscrepancyRoutes = require('./routes/otherGoodDiscrepancyRouter');
-const conssumptionControlViewRoutes = require('./routes/consumptionControlViewRoutes')
+const conssumptionControlViewRoutes = require('./routes/consumptionControlViewRoutes');
+const timeSheetRoutes = require('./routes/timeSheetRouter');
+const contradictionRoutes = require('./routes/contradictionRouter');
+const salesByProductRotes = require('./routes/salesByProductRouter');
+const getRateDifferenceRoutes = require('./routes/getRateDifferenceRoutesRouter');
+const getNegativeRateDifferenceRoutes = require('./routes/getNegativeRateDifferenceRouter');
 
 
 
@@ -34,7 +39,8 @@ const insurancecoverageRoutes = require('./routes/insurancecoverageRouter');
 const bankInfoRouts = require('./routes/bankInformationRouter');
 const companyClaimsRotes = require('./routes/companyClaimsRouter');
 const consumptionRoutes = require('./routes/consumptionControllerRouter');
-const apporovalSaleRoutes = require('./routes/apporovalSaleRouter')
+const apporovalSaleRoutes = require('./routes/apporovalSaleRouter');
+const  supportRoutes = require('./routes/supportRouter')
 
 const atfRoutes = require('./routes/atfRouter')
 
@@ -78,13 +84,18 @@ app.use('/api/materialCounting',      materialCountingRotes);
 app.use('/api/otherGoodsCounting',    otherGoodsCountingsRoutes);
 app.use('/api/materialDiscrepancy',   materialDiscrepancy);
 app.use('/api/otherGoodsDiscrepancy', otherGoodsDiscrepancyRoutes);
-app.use('/api/consumptionControlView', conssumptionControlViewRoutes)
+app.use('/api/consumptionControlView', conssumptionControlViewRoutes);
+app.use('/api/contradiction',         contradictionRoutes);
+app.use('/api/salesBuyProduct',        salesByProductRotes);
+app.use("/api/getRateDifference",     getRateDifferenceRoutes);
+app.use('/api/getNegativeRateDiffrence',  getNegativeRateDifferenceRoutes)
 // app.use('api/consumptionControlView', consuptionControlViewRoutes)
 
 //stagnations
 app.use('/api/productStagnation', productStagnationRotes);
 app.use('/api/materialStagnation', materialStagnationRoutes);
 app.use('/api/otherGoodsStagnation', otherGoodsStagnationRotes);
+app.use('/api/timesheet',          timeSheetRoutes)
 
 
 app.use('/api/lowProductTurnOver', lowProductRoutes);
@@ -100,7 +111,8 @@ app.use('/api/insurancecoverage', insurancecoverageRoutes);
 app.use('/api/bankinformation', bankInfoRouts);
 app.use('/api/companyClaims', companyClaimsRotes);
 app.use('/api/consumptionControl', consumptionRoutes);
-app.use('/api/apporovalSale', apporovalSaleRoutes)
+app.use('/api/apporovalSale', apporovalSaleRoutes);
+app.use("/api/support", supportRoutes)
 
 // app.use('/api/audit', auditRoutes)
 
