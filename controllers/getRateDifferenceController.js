@@ -39,13 +39,22 @@ exports.getRateDifference = async (req, res) => {
         if (!approvalMap[item.productCode]) return;
 
         const invoiceDate = new Date(item.InvoiceDate);
-
+        console.log(invoiceDate);
+        
 
         
         let closestApproval = approvalMap[item.productCode].filter((approval) => {
+          console.log('1111111',invoiceDate);
           return new Date(approval.approvalDate) <= invoiceDate;
+          
+          
         }).reduce((closest, current) => {
           const currentDiff = invoiceDate - new Date(current.approvalDate);
+          // console.log(currentDiff);
+          const diffInMs = invoiceDate - new Date(current.approvalDate);
+          const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+          console.log(`تفاوت زمانی: ${diffInDays} روز`);
+          
           const closestDiff = closest ? invoiceDate - new Date(closest.approvalDate) : Infinity;
           
          

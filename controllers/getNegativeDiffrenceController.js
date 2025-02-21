@@ -6,14 +6,15 @@ const approvaModel = require('./../models/apporovalSaleModel');
 
 exports.getNegativeRateDifference = async (req, res) => {
   try {
-    let { user } = req
-    let { activeReport } = user
-    if(!activeReport){
-        return res.status(400).json({ error: 'نسبت به انتخاب واحد مورد گزارش دیگری اقدام نمایید' })
-    }
+    // let { user } = req
+    // let { activeReport } = user
+    // if(!activeReport){
+    //     return res.status(400).json({ error: 'نسبت به انتخاب واحد مورد گزارش دیگری اقدام نمایید' })
+    // }
+    const { reportId } =req.params;
 
-    const sales = await salesModel.find({ reportId : activeReport }).lean();
-    const approvals = await approvaModel.find({ reportId : activeReport }).lean();
+    const sales = await salesModel.find({ reportId  }).lean();
+    const approvals = await approvaModel.find({ reportId  }).lean();
 
     if (!sales.length || !approvals.length) {
       return res.status(404).json({
@@ -65,6 +66,7 @@ exports.getNegativeRateDifference = async (req, res) => {
         if (!closestApproval) {
          
          
+          // res.status(404).json("no contect found")
           discrepancies.push({
             InvoiceNumber: item.InvoiceNumber,
             InvoiceDate: item.InvoiceDate,
@@ -78,6 +80,7 @@ exports.getNegativeRateDifference = async (req, res) => {
             amount: item.amount,
             rateDifference: 0,
             amountDifference: 0,
+            a : 0
           });
           return;
         
@@ -120,7 +123,7 @@ exports.getNegativeRateDifference = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      reportId : activeReport,
+      reportId ,
       data: discrepancies,
     });
   } catch (err) {

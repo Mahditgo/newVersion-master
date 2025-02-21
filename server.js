@@ -4,6 +4,10 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan')
 
+
+const authRoutes                = require('./routes/authRoutes')
+const userRouter                = require('./routes/userRouter')
+
 const salesRouter = require('./routes/salesRouter');
 const warehouseRouter = require('./routes/warehouseRouter');
 const materialdetailsRouts = require('./routes/materialdetailRoutes');
@@ -69,6 +73,9 @@ const connectDB = async () => {
     process.exit(1); 
   }
 };
+
+// app.use('/api/auth',                    authRoutes)
+// app.use('/api/users',                   userRouter)
 
 app.use('/api/sales',                 salesRouter);
 app.use('/api/warehouse',             warehouseRouter);
