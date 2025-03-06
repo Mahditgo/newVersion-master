@@ -5,7 +5,7 @@ exports.createBackInfo = async (req, res ) => {
     const { reportId } = req.params;
 
     const {
-        moeinCode,
+        moeinCode = 555,
         tafsilCode,
         bankName,
         accountType,
@@ -21,8 +21,11 @@ exports.createBackInfo = async (req, res ) => {
         profitAmount
     } = req.body;
     console.log(req.body);
+    const rest = { aaa : "j"};
+    console.log(rest);
     
 
+    
     try {
  if (
      !moeinCode || !tafsilCode || !bankName || !accountType ||

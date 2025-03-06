@@ -3,6 +3,28 @@
 const multer = require('multer');
 const path = require('path');
 
+// const mongoURI = 'mongodb://localhost:27017/auditOnlinee'; 
+// const conn = mongoose.createConnection(mongoURI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// })
+
+
+
+// const storage = new GridFsStorage({
+//     db: conn,
+//     file: (req, file) => {
+//         return new Promise((resolve, reject) => {
+//             const filename = `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`;
+//             const fileInfo = {
+//                 filename,
+//                 bucketName: 'uploads' // نام مجموعه‌ای که فایل‌ها در آن ذخیره می‌شوند
+//             };
+//             resolve(fileInfo);
+//         });
+//     }
+// });
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -35,3 +57,6 @@ const upload = multer({
 });
 
 module.exports = upload;
+
+
+

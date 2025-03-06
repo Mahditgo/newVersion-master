@@ -1,10 +1,12 @@
+
 const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path')
 
-const propertyModel = require('./../models/propertyDetailsModel');
 
-exports.uplaodPropertyDetails = async (req, res) => {
+// Create Handler
+exports.create = Model => async (req , res) => {
+
     try {
 
         console.log(req.body.reportId);
@@ -41,7 +43,7 @@ exports.uplaodPropertyDetails = async (req, res) => {
 
 
   
-        const existingRecord = await propertyModel.findOne({ reportId: req.body.reportId });
+        const existingRecord = await Model.findOne({ reportId: req.body.reportId });
 
         let record;
 
@@ -52,7 +54,7 @@ exports.uplaodPropertyDetails = async (req, res) => {
             record = await existingRecord.save();  
         }else {
 
-            record = new propertyModel({
+            record = new Model({
                 reportId: req.body.reportId || null, 
                 items,
                 filePaths: [filePath]
@@ -72,16 +74,18 @@ exports.uplaodPropertyDetails = async (req, res) => {
         res.status(500).json('internal server error')
         
     }
-}
+};
 
 
-exports.getPropertyDetails = async (req, res) => {
+//get
+exports.getByReportId = Model => async ( req, res ) => {
+
     try {
         
         const { reportId } = req.params;
 
         
-        const records = await propertyModel.find({reportId}); 
+        const records = await Model.find({reportId}); 
 
         if (!records || records.length === 0) {
             return res.status(404).json({ message: 'No records found' });
@@ -98,11 +102,11 @@ exports.getPropertyDetails = async (req, res) => {
 };
 
 
-
-exports.deletePropertyDetails = async (req, res) => {
+//delete
+exports.delete = Model => async(req, res) => {
     try {
         const { id } = req.params;
-        const property = await propertyModel.findById(id);
+        const property = await Model.findById(id);
 
         if (!property) {
             return res.status(404).json({
@@ -131,7 +135,7 @@ exports.deletePropertyDetails = async (req, res) => {
         }
 
         
-        await propertyModel.findByIdAndDelete(id);
+        await Model.findByIdAndDelete(id);
 
         
         if (!res.headersSent) {
@@ -154,33 +158,33 @@ exports.deletePropertyDetails = async (req, res) => {
 };
 
 
-exports.deletePropertyRow = async (req, res) => {
+//deleteByRow
+exports.deleteRow = Model => async (req, res ) => {
     const { id, itemId } = req.params;
-try {
-    const property = await propertyModel.findById(id);
-
-        if (!property) {
-            return res.status(404).json({
-                success: false,
-                message: 'No property  found with the provided id',
-            });
+        try {
+            const property = await Model.findById(id);
+    
+            if (!property) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'No property  found with the provided id',
+                });
+            }
+    
+            const result = await Model.updateOne(
+                { _id: id },
+                { $pull: { items: { _id: itemId } } }
+              );
+    
+              if (result.modifiedCount  > 0) {
+                res.status(200).send({ message: 'Item deleted successfully!' });
+              } else {
+                res.status(404).send({ message: 'Item not found!' });
+              }
+    
+        }catch(e) {
+            console.log(e.message);
+            res.status(500).json({success : false, message : 'Internal serverError'});
+            
         }
-
-        const result = await propertyModel.updateOne(
-            { _id: id },
-            { $pull: { items: { _id: itemId } } }
-          );
-
-          if (result.modifiedCount  > 0) {
-            res.status(200).send({ message: 'Item deleted successfully!' });
-          } else {
-            res.status(404).send({ message: 'Item not found!' });
-          }
-
-    }catch(e) {
-        console.log(e.message);
-        res.status(500).json({success : false, message : 'Internal serverError'});
-        
-    }
-
 }

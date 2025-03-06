@@ -2,9 +2,9 @@ const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path')
 
-const propertyModel = require('./../models/propertyDetailsModel');
+const FixedAsset = require('../models/fixedAssetModel');
 
-exports.uplaodPropertyDetails = async (req, res) => {
+exports.uplaodFixedAsset = async (req, res) => {
     try {
 
         console.log(req.body.reportId);
@@ -25,23 +25,21 @@ exports.uplaodPropertyDetails = async (req, res) => {
     console.log(data);  
 
     const items = data.map((row) => ({
-        propertyNumber: row[0] || '0',  
-        propertyTitle: row[1] || '0',
-        purchaseDate: row[2] || '0',
-        loaction: row[3] || '0',
-        descriptionRate: parseFloat(row[4]) || '0',
-        descriptionMethod: row[5] || '0',
-        purchasePrice: parseFloat(row[6]) || 0,
-        firstDepreciation: parseFloat(row[7]) || 0,
-        bookValue: parseFloat(row[8]) || 0,
-        periodDepreciation: parseFloat(row[9]) || 0,
-        endDepreciation: parseFloat(row[10]) || 0,
+        landDetails: row[0] || '0',  
+        builingDetails: row[1] || '0',
+        furnitureDetails: row[2] || '0',
+        machineDetails: row[3] || '0',
+        facilitiesDeails: row[4] || '0',
+        carDetails: row[5] || '0',
+        toolesDetails: row[6] || '0',
+        otherAssetsDetails: row[7] || '0',
+       
     }));
 
 
 
   
-        const existingRecord = await propertyModel.findOne({ reportId: req.body.reportId });
+        const existingRecord = await FixedAsset.findOne({ reportId: req.body.reportId });
 
         let record;
 
@@ -52,7 +50,7 @@ exports.uplaodPropertyDetails = async (req, res) => {
             record = await existingRecord.save();  
         }else {
 
-            record = new propertyModel({
+            record = new FixedAsset({
                 reportId: req.body.reportId || null, 
                 items,
                 filePaths: [filePath]
@@ -72,16 +70,16 @@ exports.uplaodPropertyDetails = async (req, res) => {
         res.status(500).json('internal server error')
         
     }
-}
+};
 
 
-exports.getPropertyDetails = async (req, res) => {
+exports.getFixedAsset = async (req, res) => {
     try {
         
         const { reportId } = req.params;
 
         
-        const records = await propertyModel.find({reportId}); 
+        const records = await FixedAsset.find({reportId}); 
 
         if (!records || records.length === 0) {
             return res.status(404).json({ message: 'No records found' });
@@ -98,11 +96,10 @@ exports.getPropertyDetails = async (req, res) => {
 };
 
 
-
-exports.deletePropertyDetails = async (req, res) => {
+exports.deleteFixedAsset = async (req, res) => {
     try {
         const { id } = req.params;
-        const property = await propertyModel.findById(id);
+        const property = await FixedAsset.findById(id);
 
         if (!property) {
             return res.status(404).json({
@@ -131,7 +128,7 @@ exports.deletePropertyDetails = async (req, res) => {
         }
 
         
-        await propertyModel.findByIdAndDelete(id);
+        await FixedAsset.findByIdAndDelete(id);
 
         
         if (!res.headersSent) {
@@ -154,10 +151,11 @@ exports.deletePropertyDetails = async (req, res) => {
 };
 
 
-exports.deletePropertyRow = async (req, res) => {
+
+exports.deleteFixedAssetRow = async (req, res) => {
     const { id, itemId } = req.params;
 try {
-    const property = await propertyModel.findById(id);
+    const property = await FixedAsset.findById(id);
 
         if (!property) {
             return res.status(404).json({
@@ -166,7 +164,7 @@ try {
             });
         }
 
-        const result = await propertyModel.updateOne(
+        const result = await FixedAsset.updateOne(
             { _id: id },
             { $pull: { items: { _id: itemId } } }
           );

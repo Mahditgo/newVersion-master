@@ -116,17 +116,17 @@ userSchema.statics.sendAuthCode = async function (phone) {
         throw Error('کاربری با شماره موبایل وارد شده پیدا نشد')
     }
     try {
-        let smsTemplate = await SmsTemplate.findOne({ code: 100 })
-        let { template } = smsTemplate
+        // let smsTemplate = await SmsTemplate.findOne({ code: 100 })
+        // let { template } = smsTemplate
         let text = template.replaceAll('authCode', code)
         await this.findOneAndUpdate({ phone }, { $set: { authCode: { code, expireAt } } })
-        let result = await gsm.sendMessage(phone, text)
+        // let result = await gsm.sendMessage(phone, text)
         let { status } = result
         if (status) {
-            let { smsId, cost } = result
-            await Sms.create({
-                smsId, number: phone, text, cost
-            })
+            // let { smsId, cost } = result
+            // await Sms.create({
+                // smsId, number: phone, text, cost
+            // })
             return { status: true }
         } else {
             return { status: false }

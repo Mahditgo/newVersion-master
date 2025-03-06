@@ -84,11 +84,13 @@ exports.getSalesByProduct = async (req, res) => {
 
 
 exports.getSalesByProductsBuyer = async (req, res) => {
-    // let { user } = req
-    // let { activeReport } = user
-    // if(!activeReport){
-    //     return res.status(400).json({ error: 'نسبت به انتخاب واحد مورد گزارش دیگری اقدام نمایید' })
-    // }
+    let { user } = req
+    console.log(user);
+    
+    let { activeReport } = user
+    if(!activeReport){
+        return res.status(400).json({ error: 'نسبت به انتخاب واحد مورد گزارش دیگری اقدام نمایید' })
+    }
 
     const { reportId } = req.params;
 
